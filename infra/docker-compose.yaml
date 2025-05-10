@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Zookeeper for Kafka
   zookeeper:
@@ -113,6 +111,25 @@ services:
       - 'POSTGRES_USER=postgres'
     ports:
       - '5499:5432'
+    volumes:
+      - 'product-postgres:/var/lib/postgresql/data'
+  product-source-database:
+    image: postgres:16-alpine
+    container_name: product-source-database
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5432:5432'
+    command: 
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
+      - "-c" 
+      - "max_wal_senders=10"
+      - "-c"
+      - "max_replication_slots=10"
     volumes:
       - 'product-postgres:/var/lib/postgresql/data'
 volumes:
