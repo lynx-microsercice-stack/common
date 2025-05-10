@@ -14,9 +14,13 @@
       "behavior.on.null.values": "delete",
       "delete.enabled": "true",
       "behavior.on.malformed.documents": "warn",
+      
       "transforms": "extractKey",
       "transforms.extractKey.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
       "transforms.extractKey.field": "id",
+      
+      "decimal.handling.mode": "double",
+      "numeric.mapping": "best_fit",
       "key.converter": "org.apache.kafka.connect.json.JsonConverter",
       "key.converter.schemas.enable": "false",
       "value.converter": "org.apache.kafka.connect.json.JsonConverter",

@@ -64,6 +64,14 @@ services:
       VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       VALUE_CONVERTER_SCHEMAS_ENABLE: "true"
+      # Fix for binary data encoding issues
+      CONNECT_CONVERTER_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      # Disable handling binary data as base64
+      CONNECT_VALUE_CONVERTER_DECIMAL_FORMAT: "NUMERIC"
+      CONNECT_KEY_CONVERTER_DECIMAL_FORMAT: "NUMERIC"
+      # Connector specific converters for proper type handling
+      CONNECT_CONNECTOR_CLIENT_CONFIG_OVERRIDE_POLICY: "All"
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
       # Enable connector configuration through API
       CONNECT_REST_PORT: 8083
@@ -113,25 +121,25 @@ services:
       - '5499:5432'
     volumes:
       - 'product-postgres:/var/lib/postgresql/data'
-  product-source-database:
-    image: postgres:16-alpine
-    container_name: product-source-database
-    environment:
-      - 'POSTGRES_DB=postgres'
-      - 'POSTGRES_PASSWORD=postgres'
-      - 'POSTGRES_USER=postgres'
-    ports:
-      - '5432:5432'
-    command: 
-      - "postgres"
-      - "-c"
-      - "wal_level=logical"
-      - "-c" 
-      - "max_wal_senders=10"
-      - "-c"
-      - "max_replication_slots=10"
-    volumes:
-      - 'product-postgres:/var/lib/postgresql/data'
+  # product-source-database:
+  #   image: postgres:16-alpine
+  #   container_name: product-source-database
+  #   environment:
+  #     - 'POSTGRES_DB=postgres'
+  #     - 'POSTGRES_PASSWORD=postgres'
+  #     - 'POSTGRES_USER=postgres'
+  #   ports:
+  #     - '5432:5432'
+  #   command: 
+  #     - "postgres"
+  #     - "-c"
+  #     - "wal_level=logical"
+  #     - "-c" 
+  #     - "max_wal_senders=10"
+  #     - "-c"
+  #     - "max_replication_slots=10"
+  #   volumes:
+  #     - 'product-postgres:/var/lib/postgresql/data'
 volumes:
   # For connector plugins
   product-postgres:
